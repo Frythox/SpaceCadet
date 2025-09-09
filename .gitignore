@@ -1,0 +1,50 @@
+## Visual Studio cache
+.vs/
+*.vsidx
+*.vscode/
+
+## Build results
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+Debug/
+Release/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+
+## User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## Backup & temp files
+*.tmp
+*.bak
+*.swp
+*.sln.docstates
+
+## NuGet packages
+*.nupkg
+*.snupkg
+packages/
+.nuget/
+
+## Rider / JetBrains IDE
+.idea/
+*.iml
+
+## OS generated files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+## Raylib-specific (si tu génères des assets en cache)
+*.dll
+*.exe
+*.pdb
+*.mdb
+*.cache

@@ -1,4 +1,5 @@
-﻿using Raylib_cs;
+﻿using LibEntity;
+using Raylib_cs;
 using System.Numerics;
 
 // === Variables globales ===
@@ -16,9 +17,9 @@ Texture2D backFinal;
 Music death;
 Music theme;
 
-Player player = new Player();
-Ennemy ennemy = new Ennemy();
-Collectables collectables = new Collectables();
+Player player;
+Ennemy ennemy;
+Collectables collectables;
 List<ComboText> comboTexts = new List<ComboText>();
 
 // === Initialisation ===
@@ -75,9 +76,6 @@ void HandleInit()
     theme = Raylib.LoadMusicStream("Sound/spaceship.wav");
     Raylib.SetWindowIcon(icon);
     Raylib.SetTargetFPS(120);
-    player.LoadTextures();
-    ennemy.LoadTextures();
-    collectables.LoadTextures();
     Reset();
 }
 
@@ -531,32 +529,24 @@ void Reset()
     Raylib.PlayMusicStream(death);
     fileMeth = false;
     // Joueur
-    player.speed = 100f;
-    player.position = new Vector2(90, 270);
-    player.angle = 0f;
-    player.trail = new List<Vector2>();
-    player.trailTimer = 0f;
-    player.isBoosted = false;
+    player = new Player();
 
     // Ennemi
-    ennemy.position = new Vector2(-50, 270);
-    ennemy.angle = 0f;
-    ennemy.timer = 0f;
-    ennemy.bestIndex = -1;
-    ennemy.speed = 170f;
-    ennemy.isSlow = false;
+    ennemy = new Ennemy();
 
     // Collectables
-    collectables.point = 0;
-    collectables.boostTimer = 0f;
-    collectables.positionBase = new List<Vector2>();
-    collectables.positionSlow = new List<Vector2>();
-    collectables.positionMorePoints = new List<Vector2>();
-    collectables.timer = 0f;
-    collectables.combo = 0;
-    collectables.itemUse = 1;
+    collectables = new Collectables();
 
     currentState = GameState.Menu;
+
+    Raylib.UnloadTexture(player.texture);
+    Raylib.UnloadTexture(ennemy.texture);
+    Raylib.UnloadTexture(collectables.textureBase);
+    Raylib.UnloadTexture(collectables.textureMorePoints);
+    Raylib.UnloadTexture(collectables.textureSlow);
+    player.LoadTextures();
+    ennemy.LoadTextures();
+    collectables.LoadTextures();
 }
 
 // --- Aide du jeu ---
@@ -632,107 +622,6 @@ void Podium()
 }
 
 // === Classes ===
-class Player
-{
-    public float speed;
-    public Vector2 position;
-    public float radius;
-    public float angle;
-    public Texture2D texture;
-    public Vector2 textureCenter;
-    public float tourner;
-    public List<Vector2> trail;
-    public float trailTimer;
-    public float trailInterval;
-    public bool isBoosted;
-
-    public Player()
-    {
-        radius = 50f;
-        tourner = 180f;
-        trailInterval = 0.1f;
-    }
-
-    public void LoadTextures()
-    {
-        texture = Raylib.LoadTexture("image/ship.png");
-        textureCenter = new Vector2(texture.Width / 2f, texture.Height / 2f);
-    }
-}
-
-class Ennemy
-{
-    public float speed;
-    public Vector2 position;
-    public float radius;
-    public float angle;
-    public Texture2D texture;
-    public Vector2 textureCenter;
-    public float timer;
-    public float visionRadius;
-    public int bestIndex;
-    public bool isSlow;
-
-    public Ennemy()
-    {
-        radius = 25f;
-        visionRadius = 25f;
-    }
-
-    public void LoadTextures()
-    {
-        texture = Raylib.LoadTexture("image/craft.png");
-        textureCenter = new Vector2(texture.Width / 2f, texture.Height / 2f);
-    }
-}
-
-class Collectables
-{
-    public int point;
-    public Texture2D textureBase;
-    public Texture2D textureSlow;
-    public Texture2D textureMorePoints;
-    public Vector2 textureCenter;
-    public float boost;
-    public float boostTimer;
-    public Sound pickupSound;
-    public Random random = new Random();
-    public List<Vector2> positionBase;
-    public List<Vector2> positionSlow;
-    public List<Vector2> positionMorePoints;
-    public float timer;
-    public float interval;
-    public int radius;
-    public int combo;
-    public int itemUse;
-    public Sound teleportation;
-    public Texture2D teleportationT;
-    public Texture2D teleportationF;
-    public Vector2 teleportationV;
-    public Sound Kids;
-
-    public Collectables()
-    {
-        boost = 50f;
-        interval = 5f;
-        radius = 10;
-        teleportationV = new Vector2(766, 3);
-    }
-
-    public void LoadTextures()
-    {
-        textureBase = Raylib.LoadTexture("image/gas-tank.png");
-        textureSlow = Raylib.LoadTexture("image/gas-tank -blue.png");
-        textureMorePoints = Raylib.LoadTexture("image/gas-tank -red.png");
-        textureCenter = new Vector2(textureBase.Width / 2f, textureBase.Height / 2f);
-        pickupSound = Raylib.LoadSound("Sound/bell_ding1.wav");
-        teleportationT = Raylib.LoadTexture("Image/teleportergreen.png");
-        teleportationF = Raylib.LoadTexture("Image/teleporterred.png");
-        teleportation = Raylib.LoadSound("Sound/laser1.wav");
-        Kids = Raylib.LoadSound("Sound/Kids.mp3");
-    }
-}
-
 class ComboText
 {
     public Vector2 Position;
